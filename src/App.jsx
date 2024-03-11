@@ -4,6 +4,8 @@ import Login from "./components/Login";
 
 function App() {
   return (
+    //we use Routes to navigate through pages with no extra loading
+    // kind of like an SPA !..
     <>
       <Router>
         <Routes>

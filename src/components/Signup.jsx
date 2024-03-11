@@ -3,7 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../zod/SignupSchema";
 import { Link, useNavigate } from "react-router-dom";
 const Signup = () => {
+  // we use router dom hook for SPA routing (no extra loading)
   const navigate = useNavigate();
+  // now we handle the form validation using rhf and zod
   const {
     register,
     handleSubmit,
@@ -17,7 +19,7 @@ const Signup = () => {
   function createForm(data) {
     return { ...data, last_name: data.lname, name: data.fname };
   }
-
+// we send the sign up data to server using fetch async
   async function onSubmit(data) {
     const create = createForm(data);
     const response = await fetch("http://198.244.146.216:8000/user/create", {
@@ -29,7 +31,8 @@ const Signup = () => {
     });
     const responseData = await response.json();
     if (!response.ok) {
-      // response status is not 2xx
+      // we should change the alert (this is just a test)
+      // have no more data what to do here and where to navigate to !
       alert("Submitting form failed!");
       return;
     } else {

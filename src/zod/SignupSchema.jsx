@@ -1,4 +1,6 @@
 import { z } from "zod";
+// we use zod to handle form validation from server and not just from client
+// we pass down the custom messages here
 export const signUpSchema = z
   .object({
     email: z.string().min(1, "Enter Your Email Address").email("Email address is not correct"),
@@ -13,6 +15,7 @@ export const signUpSchema = z
     message: "Checkbox must be checked",
     path: ["checkbox"],
   })
+  // we check the confirm password here with refine method
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords MUST match",
     path: ["confirmPassword"],

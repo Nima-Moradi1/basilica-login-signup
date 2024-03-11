@@ -3,7 +3,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "../zod/LoginSchema";
 import { Link, useNavigate } from "react-router-dom";
 const Login = () => {
+  // we use router dom hooks to navigate SPA (no extra loading)
   const navigate = useNavigate();
+  // we use react hook form to handle form data 
   const {
     register,
     handleSubmit,
@@ -12,7 +14,7 @@ const Login = () => {
   } = useForm({
     resolver: zodResolver(LoginSchema),
   });
-
+// here we send the data to the server through fetch
   const onSubmit = async (data) => {
     const response = await fetch("http://198.244.146.216:8000/login", {
       method: "POST",
@@ -21,6 +23,8 @@ const Login = () => {
         "Content-Type": "application/json",
       },
     });
+    // we can use toast to actually show user something
+    // i still have no data to what to do next 
     const responseData = await response.json();
     if (!response.ok) {
       // response status is not 2xx
@@ -33,7 +37,7 @@ const Login = () => {
 
     if (responseData.errors) {
       const errors = responseData.errors;
-
+// we handle the errors with zod through r-h-f
       if (errors.email) {
         setError("email", {
           type: "server",
