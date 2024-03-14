@@ -2,7 +2,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUpSchema } from "../zod/SignupSchema";
 import { Link, useNavigate } from "react-router-dom";
+import { Api } from "../../core/http";
+import { Spinner } from "./Spinner";
+import toast from "react-hot-toast";
 const Signup = () => {
+  const api = new Api();
   // we use router dom hook for SPA routing (no extra loading)
   const navigate = useNavigate();
   // now we handle the form validation using rhf and zod
@@ -19,24 +23,18 @@ const Signup = () => {
   function createForm(data) {
     return { ...data, last_name: data.lname, name: data.fname };
   }
-// we send the sign up data to server using fetch async
+  // we send the sign up data to server using fetch async
   async function onSubmit(data) {
     const create = createForm(data);
-    const response = await fetch("http://198.244.146.216:8000/user/create", {
-      method: "POST",
-      body: JSON.stringify(create),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await api.post("user/create", JSON.stringify(create));
     const responseData = await response.json();
     if (!response.ok) {
       // we should change the alert (this is just a test)
       // have no more data what to do here and where to navigate to !
-      alert("Submitting form failed!");
+      toast.error("Submitting form failed!");
       return;
     } else {
-      alert("account successfully created");
+      toast.success("account successfully created");
       navigate("/login");
     }
     if (responseData.errors) {
@@ -70,24 +68,24 @@ const Signup = () => {
   }
 
   return (
-    <div>
+    <div className="max-w-5xl mx-auto bg-white lg:translate-y-4 shadow-md shadow-black rounded-xl">
       <div className="flex flex-col lg:flex-row mb-10 lg:mb-0">
-        <div>
+        <div className="bg-primary lg:rounded-l-xl lg:mr-5 mb-10 lg:mb-0">
           <img
-            src="src/assets/signup.jpg"
-            className=" w-screen h-[40vh] lg:w-[50vw] lg:h-screen"
+            src="src/assets/signup.png"
+            className=" w-screen h-[40vh] lg:h-full lg:w-[60vw] lg:pr-5"
           />
         </div>
-        <div className="flex gap-10 flex-col items-center lg:w-[50vw]">
+        <div className="flex gap-1 flex-col items-center lg:w-[50vw]">
           <div>
             <img
-              src="src/assets/logo2.png"
-              className="hidden lg:flex w-60"
+              src="src/assets/logo.png"
+              className="hidden lg:flex w-48"
             />
           </div>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-11 *:border-b-2 *:border-black *:outline-none ">
+            className="flex flex-col lg:pr-5 lg:w-full w-[60vw] gap-10 *:border-b-2 *:border-black *:outline-none ">
             <input
               {...register("email")}
               type="email"
@@ -134,18 +132,18 @@ const Signup = () => {
                 {...register("checkbox")}
                 type="checkbox"
               />
-              <span>
+              <span className="text-sm">
                 {" "}
                 I agree to the platform&apos;s&nbsp;
                 <a
                   href="/"
-                  className="text-blue-950 underline">
+                  className="text-primary underline">
                   Terms of Service
                 </a>{" "}
                 and&nbsp;
                 <a
                   href="/"
-                  className="text-blue-950 underline">
+                  className="text-primary underline">
                   Privacy Policy
                 </a>
               </span>
@@ -156,14 +154,14 @@ const Signup = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="disabled:bg-gray-600 hover:scale-105 hover:transition-all duration-200 border-none text-white bg-blue-950 p-2 rounded-xl w-40 mx-auto">
-              Sign up
+              className="disabled:bg-gray-600 flex items-center justify-center hover:scale-105 hover:transition-all duration-200 border-none text-white bg-blue-950 p-2 rounded-xl w-40 mx-auto">
+              {isSubmitting ? <Spinner /> : "Sign Up"}
             </button>
           </form>
-          <p>
+          <p className="my-5">
             Already have an account ?{" "}
             <Link to="/login">
-              <span className="text-blue-950 font-extrabold text-xl">Log in</span>
+              <span className="text-primary font-extrabold text-xl">Log in</span>
             </Link>
           </p>
         </div>
