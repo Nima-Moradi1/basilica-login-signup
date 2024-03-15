@@ -1,13 +1,14 @@
 export class  Api {
    baseUrl = "https://api.basilica.finance"
 
-   public async get(url:string , headers) {
+   public async get(url:string  ,headers) {
   return await fetch(`${this.baseUrl}/${url}`, {
         method: "GET",
         headers: {
           ...headers,
           "Content-Type": "application/json",
         },
+        
       });
    } 
    public async post(url:string , body, headers) {

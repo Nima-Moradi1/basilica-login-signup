@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Api } from "../../core/http";
 import { Spinner } from "./Spinner";
 import toast from "react-hot-toast";
+import Logo from "./Logo";
+import Button from "./Button";
 const Signup = () => {
   const api = new Api();
   // we use router dom hook for SPA routing (no extra loading)
@@ -68,64 +70,59 @@ const Signup = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto bg-white lg:translate-y-4 shadow-md shadow-black rounded-xl">
+    <div className="max-w-4xl mx-auto bg-white lg:translate-y-5 shadow-md shadow-black rounded-xl">
       <div className="flex flex-col lg:flex-row mb-10 lg:mb-0">
         <div className="bg-primary lg:rounded-l-xl lg:mr-5 mb-10 lg:mb-0">
           <img
-            src="src/assets/signup.png"
-            className=" w-screen h-[40vh] lg:h-full lg:w-[60vw] lg:pr-5"
+            src="src/assets/signup2.png"
+            className=" w-screen h-[40vh] lg:h-[80vh] lg:w-[60vw] lg:pr-5"
           />
         </div>
         <div className="flex gap-1 flex-col items-center lg:w-[50vw]">
           <div>
-            <img
-              src="src/assets/logo.png"
-              className="hidden lg:flex w-48"
-            />
+            <Logo />
           </div>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col lg:pr-5 lg:w-full w-[60vw] gap-10 *:border-b-2 *:border-black *:outline-none ">
+            className="flex flex-col text-sm lg:pr-5 lg:w-full w-[60vw] gap-8 *:border-b-2 *:border-black *:outline-none ">
             <input
               {...register("email")}
               type="email"
               placeholder="Email"
             />
-            {errors.email && <p className="text-sm text-red-500 -my-8 border-none">{`${errors.email.message}`}</p>}
+            {errors.email && <p className="text-sm text-error -my-8 border-none">{`${errors.email.message}`}</p>}
 
             <input
               {...register("fname")}
               type="text"
               placeholder="FirstName"
             />
-            {errors.fname && <p className="text-sm text-red-500 -my-8 border-none">{`${errors.fname.message}`}</p>}
+            {errors.fname && <p className="text-sm text-error -my-8 border-none">{`${errors.fname.message}`}</p>}
             <input
               {...register("lname")}
               type="text"
               placeholder="LastName"
             />
-            {errors.lname && <p className="text-sm text-red-500 -my-8 border-none">{`${errors.lname.message}`}</p>}
+            {errors.lname && <p className="text-sm text-error -my-8 border-none">{`${errors.lname.message}`}</p>}
             <input
               {...register("phone")}
               type="tel"
-              placeholder="Phone Number"
+              placeholder="+989121111111"
             />
-            {errors.phone && <p className="text-sm text-red-500 -my-8 border-none">{`${errors.phone.message}`}</p>}
+            {errors.phone && <p className="text-sm text-error -my-8 border-none">{`${errors.phone.message}`}</p>}
             <input
               {...register("password")}
               type="password"
               placeholder="Password"
             />
-            {errors.password && (
-              <p className="text-sm text-red-500 -my-8 border-none">{`${errors.password.message}`}</p>
-            )}
+            {errors.password && <p className="text-sm text-error -my-8 border-none">{`${errors.password.message}`}</p>}
             <input
               {...register("confirmPassword")}
               type="password"
               placeholder="Confirm Password"
             />
             {errors.confirmPassword && (
-              <p className="text-sm text-red-500 -my-8 border-none">{`${errors.confirmPassword.message}`}</p>
+              <p className="text-sm text-error -my-8 border-none">{`${errors.confirmPassword.message}`}</p>
             )}
             <div className="border-none">
               <input
@@ -148,17 +145,14 @@ const Signup = () => {
                 </a>
               </span>
             </div>
-            {errors.checkbox && (
-              <p className="text-sm text-red-500 -mt-8 border-none">{`${errors.checkbox.message}`}</p>
-            )}
-            <button
+            {errors.checkbox && <p className="text-sm text-error -mt-8 border-none">{`${errors.checkbox.message}`}</p>}
+            <Button
               type="submit"
               disabled={isSubmitting}
-              className="disabled:bg-gray-600 flex items-center justify-center hover:scale-105 hover:transition-all duration-200 border-none text-white bg-blue-950 p-2 rounded-xl w-40 mx-auto">
-              {isSubmitting ? <Spinner /> : "Sign Up"}
-            </button>
+              label={isSubmitting ? <Spinner /> : "SIGN UP"}
+            />
           </form>
-          <p className="my-5">
+          <p className="my-1">
             Already have an account ?{" "}
             <Link to="/login">
               <span className="text-primary font-extrabold text-xl">Log in</span>
