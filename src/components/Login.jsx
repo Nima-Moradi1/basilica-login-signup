@@ -7,6 +7,8 @@ import { Spinner } from "./Spinner";
 import toast from "react-hot-toast";
 import Logo from "./Logo";
 import Button from "./Button";
+import Error from "./Error";
+
 const Login = () => {
   // we use router dom hooks to navigate SPA (no extra loading)
 
@@ -16,7 +18,6 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(LoginSchema),
@@ -30,34 +31,11 @@ const Login = () => {
 
     if (!response.ok) {
       // response status is not 2xx
-      toast.error("Login Failed");
+      toast.error(JSON.stringify(responseData.detail));
       return;
     } else {
       toast.success("logged in successfully!");
       navigate("/preds");
-    }
-
-    if (responseData.errors) {
-      const errors = responseData.errors;
-      // we handle the errors with zod through r-h-f
-      if (errors.email) {
-        setError("email", {
-          type: "server",
-          message: errors.email,
-        });
-      } else if (errors.password) {
-        setError("password", {
-          type: "server",
-          message: errors.password,
-        });
-      } else if (errors.confirmPassword) {
-        setError("confirmPassword", {
-          type: "server",
-          message: errors.confirmPassword,
-        });
-      } else {
-        alert("Something went wrong!");
-      }
     }
   };
 
@@ -83,15 +61,13 @@ const Login = () => {
                 type="email"
                 placeholder="Username Or Email"
               />
-              {errors.email && <p className="text-sm text-red-500 -my-8 border-none">{`${errors.email.message}`}</p>}
+              {errors.email && <Error errorMsg={errors.email.message} />}
               <input
                 {...register("password")}
                 type="password"
                 placeholder="Password"
               />
-              {errors.password && (
-                <p className="text-sm text-red-500 -my-8 border-none">{`${errors.password.message}`}</p>
-              )}
+              {errors.password && <Error errorMsg={errors.password.message} />}
               <a
                 href="/"
                 className="text-primary font-extrabold border-none text-end">

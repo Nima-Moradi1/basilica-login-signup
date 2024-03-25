@@ -23,7 +23,7 @@ function App() {
               path="/login"
               element={<Login />}></Route>
             <Route
-              path="/adm"
+              path="/adm/*"
               element={<PrivateRoute />}></Route>
           </Routes>
         </Router>

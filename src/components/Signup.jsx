@@ -7,6 +7,8 @@ import { Spinner } from "./Spinner";
 import toast from "react-hot-toast";
 import Logo from "./Logo";
 import Button from "./Button";
+import Error from "./Error";
+
 const Signup = () => {
   const api = new Api();
   // we use router dom hook for SPA routing (no extra loading)
@@ -86,44 +88,41 @@ const Signup = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col text-sm lg:pr-5 lg:w-full w-[60vw] gap-8 *:border-b-2 *:border-black *:outline-none ">
             <input
-              {...register("email")}
               type="email"
-              placeholder="Email"
+              placeholder="Email Address"
+              {...register("email")}
             />
-            {errors.email && <p className="text-sm text-error -my-8 border-none">{`${errors.email.message}`}</p>}
-
+            {errors.email && <Error errorMsg={errors.email.message} />}
             <input
               {...register("fname")}
               type="text"
               placeholder="FirstName"
             />
-            {errors.fname && <p className="text-sm text-error -my-8 border-none">{`${errors.fname.message}`}</p>}
+            {errors.fname && <Error errorMsg={errors.fname.message} />}
             <input
               {...register("lname")}
               type="text"
               placeholder="LastName"
             />
-            {errors.lname && <p className="text-sm text-error -my-8 border-none">{`${errors.lname.message}`}</p>}
+            {errors.lname && <Error errorMsg={errors.lname.message} />}
             <input
               {...register("phone")}
               type="tel"
               placeholder="+989121111111"
             />
-            {errors.phone && <p className="text-sm text-error -my-8 border-none">{`${errors.phone.message}`}</p>}
+            {errors.phone && <Error errorMsg={errors.phone.message} />}
             <input
               {...register("password")}
               type="password"
               placeholder="Password"
             />
-            {errors.password && <p className="text-sm text-error -my-8 border-none">{`${errors.password.message}`}</p>}
+            {errors.password && <Error errorMsg={errors.password.message} />}
             <input
               {...register("confirmPassword")}
               type="password"
               placeholder="Confirm Password"
             />
-            {errors.confirmPassword && (
-              <p className="text-sm text-error -my-8 border-none">{`${errors.confirmPassword.message}`}</p>
-            )}
+            {errors.confirmPassword && <Error errorMsg={errors.confirmPassword.message} />}
             <div className="border-none">
               <input
                 {...register("checkbox")}
@@ -145,7 +144,12 @@ const Signup = () => {
                 </a>
               </span>
             </div>
-            {errors.checkbox && <p className="text-sm text-error -mt-8 border-none">{`${errors.checkbox.message}`}</p>}
+            {errors.checkbox && (
+              <Error
+                className="mb-1"
+                errorMsg={errors.checkbox.message}
+              />
+            )}
             <Button
               type="submit"
               disabled={isSubmitting}

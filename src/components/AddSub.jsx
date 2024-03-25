@@ -4,18 +4,31 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Spinner } from "./Spinner";
-
+import { SubscriptionSchema } from "../zod/SubscriptionSchema";
+import Error from "./Error";
 //prettier-ignore
 const AddSub = () => {
-    const {
+
+  // const [changedDate, setChangedDate] = useState('');
+
+  // const handleDateChange = (e) => {
+  //   // we Format the date here
+  //   const inputDate = e.target.value;
+  //   // we Validate and format the date input as needed
+  //   const formattedDate = new Date(inputDate).toISOString().split('T')[0]; // Format as YYYY-MM-DD
+
+  //   setChangedDate(formattedDate);
+  // };
+
+      const {
         register,
         handleSubmit,
         reset,
-        formState: { isSubmitting },
+        formState: { isSubmitting , errors },
       } = useForm({
-        resolver: zodResolver("here we need to add something"),
+        resolver: zodResolver(SubscriptionSchema),
       });
-    const api = new Api() ;
+        const api = new Api() ;
         const onSubmit = async (data) => {
             const response = await api.post("add-subscription", JSON.stringify(data));
         // we can use toast to actually show user something
@@ -24,33 +37,39 @@ const AddSub = () => {
         console.log(responseData)
         if (!response.ok) {
           // response status is not 2xx
-          toast.error("Subscription Failed");
+          toast.error("Subscription Adding Failed");
           return;
         } else {
-          toast.success("Subscription Successfully!");
+          toast.success("Subscription Added Successfully!");
         }
     reset() ;
     }
 
+
   return (
     <div className="w-full h-full">
-      <div className="max-w-2xl flex flex-col gap-10 shadow-md 
-      lg:translate-y-[20%] p-4
-       shadow-black sm:rounded-xl mx-auto text-center">
+      
         <h1 className="text-2xl font-bold">Add Subscription</h1>
         <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col p-4 text-sm lg:pr-5 lg:w-full w-[60vw] mx-auto gap-8 *:border-b-2 *:border-black *:outline-none ">
+        className="flex flex-col p-4 text-sm lg:pr-5 lg:w-full w-[60vw] 
+        mx-auto gap-8 *:border-b-2 *:border-black *:outline-none 
+        *:bg-slate-100">
             <input 
             {...register("user_email")}
             type="email"
             placeholder="User Email"
             />
-            <input type="date"
+            
+            <input
             {...register("start")}
-            />
-            <input type="date"   
-            {...register("end")} 
+            id="start"
+            type="date"
+          />
+            <input
+           {...register("end")}
+            id="end"
+            type="date" 
             />
             <select 
             {...register("subscription_type")}>
@@ -63,9 +82,11 @@ const AddSub = () => {
             type='submit'
             disabled={isSubmitting}
             />
+                      {errors && <Error 
+                      className='mt-4'
+                      errorMsg={errors.message}/> }
         </form>
        </div>
-    </div>
   );
 };
 
